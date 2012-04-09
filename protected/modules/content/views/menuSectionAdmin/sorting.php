@@ -1,8 +1,8 @@
 <?
-$this->page_title = $this->t('admin', 'Сортировка пунктов меню');
+$this->page_title = 'Сортировка пунктов меню';
 
 $this->tabs = array(
-    $this->t('admin', 'Управление пунктами меню')  => $this->createUrl("manage", array('menu_id'=> $menu_id)),
+    'Управление пунктами меню'  => $this->createUrl("manage", array('menu_id'=> $menu_id)),
 );
 
 ?>

@@ -1,5 +1,4 @@
 <?
-
 class LanguageSwitcherAdmin extends  Portlet
 {
     public function renderContent()

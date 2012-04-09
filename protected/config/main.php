@@ -173,19 +173,23 @@ return array(
 //                        'connectionID' => 'db',
 //                        'logTableName' => 'log',
 //                        'enabled'      => true
-//                    )
-//                    array(
+//                    ),
+                    array(
                            /*направляем результаты профайлинга в ProfileLogRoute (отображается
                            внизу страницы)*/
-//                          'class'=>'CProfileLogRoute',
-//                          'levels'=>'profile',
-//                          'enabled'=>true,
+                          'class'=>'CProfileLogRoute',
+                          'levels'=>'profile',
+                          'enabled'=>true,
+                    ),
+//                    array(
+//                        'class' => 'CWebLogRoute',
+//                        'categories' => 'application, widgets',
+//                        'levels'=>'error, warning, trace, profile, info',
 //                    ),
                 ),
         ),
-
         'cache' => array(
-            'class'=>'system.caching.CFileCache',
+            'class'=>'CFileCache',
         ),
     ),
 

@@ -11,22 +11,39 @@ class HelpAdminController extends AdminController
         return array(
             'Sortable'         => 'Изменение позиции',
             'ManyManySortable' => 'Изменение позиции для отношений ManyMany',
-            'SaveAttribute'    => 'Сохранение Атрибута'
+            'SaveAttribute'    => 'Сохранение Атрибута',
+            'Render'           => 'render',
+            'Createnode'       => 'createnode',
+            'Deletenode'       => 'deletenode',
+            'Movenode'         => 'movenode',
+            'Copynode'         => 'copynode',
+        );
+    }
+    public function behaviors() {
+        return array(
+            'EJNestedTreeActions'=>array(
+                'class'=>'ext.EJNestedTreeActions.EBehavior',
+                'classname'=>'Tree',
+                'identity'=>'id',
+                'text'=>'id',
+            ),
         );
     }
 
     public function actions()
     {
         return array(
-            'sortable'         => array(
-                'class' => 'ext.sortable.SortableAction',
-            ),
-            'manyManySortable' => array(
-                'class' => 'ext.sortable.ManyManySortableAction',
-            ),
-            'saveAttribute'    => array(
-                'class' => 'main.components.SaveAttributeAction',
-            )
+            'sortable'         => 'ext.sortable.SortableAction',
+            'manyManySortable' => 'ext.sortable.ManyManySortableAction',
+            'saveAttribute'    => 'main.components.SaveAttributeAction',
+
+
+            'render'           => 'ext.EJNestedTreeActions.actions.Render',
+            'createnode'       => 'ext.EJNestedTreeActions.actions.Createnode',
+            'renamenode'       => 'ext.EJNestedTreeActions.actions.Renamenode',
+            'deletenode'       => 'ext.EJNestedTreeActions.actions.Deletenode',
+            'movenode'         => 'ext.EJNestedTreeActions.actions.Movenode',
+            'copynode'         => 'ext.EJNestedTreeActions.actions.Copynode',
         );
     }
 }

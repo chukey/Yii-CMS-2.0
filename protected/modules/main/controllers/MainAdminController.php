@@ -14,9 +14,10 @@ class MainAdminController extends AdminController
 
     public function actionIndex()
     {
-        $this->render('index', array(
-            'modules' => AppManager::getModulesData(true, true)
-        ));
+        $this->render('example');
+//        $this->render('index', array(
+//            'modules' => AppManager::getModulesData(true, true)
+//        ));
     }
     
     
