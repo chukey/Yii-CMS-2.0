@@ -49,17 +49,14 @@ class PageController extends Controller
         $version = key(array_slice($tags,0,1));
         $cur_v = '0.0.1';
 
-
         if (version_compare($version, $cur_v, '>'))
         {
-            $target = Yii::getPathOfAlias('application.runtime').'/'.$version;
-
-            $pp = Yii::getPathOfAlias('application.components');
-
-            $p = new Phar($target.'.phar');
+            $target = Yii::getPathOfAlias('application.runtime').'/';
+            $src = 'https://raw.github.com/ostapetc/Yii-CMS-2.0/tree_and_update/protected/';
+            $file = $version.'.phar';
+            file_put_contents($target.$file, file_get_contents($src.$file));
+            $p = new Phar($target.$file);
             $p->extractTo(Yii::getPathOfAlias('application.runtime'));
-            Y::dump(3);
-            $p->buildFromDirectory($pp);
         }
 
         Y::dump($tags);
