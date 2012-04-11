@@ -49,23 +49,19 @@ class PageController extends Controller
         $version = key(array_slice($tags,0,1));
         $cur_v = '0.0.1';
 
+
         if (version_compare($version, $cur_v, '>'))
         {
-            $tag = 'https://github.com/nizsheanez/documentation/zipball/'.$version;
-            $base = Yii::getPathOfAlias('application.runtime').'/';
-            $src = $base.$version.'.zip';
-//            file_put_contents($src, file_get_contents($tag));
-            $target = $base.$version;
+            $target = Yii::getPathOfAlias('application.runtime').'/'.$version;
 
             $pp = Yii::getPathOfAlias('application.components');
-            $p = new Phar('new.tar.phar');
-            $p->startBuffering();
-            // add all files in /path/to/project, saving in the phar with the prefix "project"
-            $di = new DirectoryIterator($pp);
-            $dii = new RecursiveIteratorIterator($di);
-            $p->buildFromIterator($dii, $target);
 
+            $p = new Phar($target.'.phar');
+            $p->extractTo(Yii::getPathOfAlias('application.runtime'));
+            Y::dump(3);
+            $p->buildFromDirectory($pp);
         }
+
         Y::dump($tags);
 
 
