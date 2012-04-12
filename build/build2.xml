@@ -1,0 +1,107 @@
+
+<project name="foobar" default="build">
+<taskdef name="svnlastfolder" classname="phing.tasks.ext.svn.SvnLastFolderTask" />
+<taskdef name="svnexportdiff" classname="phing.tasks.ext.svn.SvnExportDiffTask" />
+
+<property name="tmpdir" value="D:\Project\tmp" />
+<property name="svnpath" value="C:\Programs\Svn\bin\svn.exe" />
+<property name="username" value="username" />
+<property name="repo" value="http://repo.url.here/" />
+<property name="ftpserver" value="ftp.server.here" />
+<property name="ftpport" value="21" />
+<property name="ftpusername" value="username" />
+<property name="ftpdir" value="/" />
+
+<target name="password">
+    <propertyprompt
+            propertyName="password"
+            promptText="Enter svn password"
+            />
+    <propertyprompt
+            propertyName="ftppassword"
+            promptText="Enter ftp password"
+            />
+</target>
+
+<target name="tagsvn" depends="password">
+    <svnlastfolder
+            svnpath="${svnpath}"
+            username="${username}"
+            password="${password}"
+            nocache="true"
+            repositoryurl="${repo}/tags"
+            namepropertyname="svn.last.name"
+            revpropertyname="svn.last.rev"
+            />
+    <echo message="Last tag is ${svn.last.name} (revision ${svn.last.rev})" />
+
+    <php
+            expression="''; preg_match('/([^0-9.]*)([0-9.]+)/', '${svn.last.name}', $m); $retval = $m[1];"
+            returnProperty="newtag.prefix"
+            />
+    <php
+            expression="substr('${svn.last.name}', strlen('${newtag.prefix}'));"
+            returnProperty="newtag.version"
+            />
+
+    <php
+            expression="''; $a = explode('.', '${newtag.version}'); $last = array_pop($a); $a[] = ++$last; $retval = implode('.', $a);"
+            returnProperty="newtag.version"
+            />
+
+    <propertyprompt
+            propertyName="newtag.version"
+            defaultValue="${newtag.version}"
+            promptText="New tag (from trunk) will be '${newtag.prefix}' with version"
+            />
+
+    <svncopy
+            svnpath="${svnpath}"
+            username="${username}"
+            password="${password}"
+            nocache="true"
+            repositoryurl="${repo}/trunk"
+            todir="${repo}/tags/${newtag.prefix}${newtag.version}"
+            message="tagging version ${newtag.version}"
+            />
+
+    <echo message="New tag ${newtag.prefix}${newtag.version} created" />
+</target>
+
+<target name="cleantmp">
+    <delete includeemptydirs="true" verbose="true">
+        <fileset dir="${tmpdir}">
+            <include name="**" />
+        </fileset>
+    </delete>
+</target>
+
+<target name="ftpdiff" depends="password,tagsvn,cleantmp">
+    <svnexportdiff
+            svnpath="${svnpath}"
+            username="${username}"
+            password="${password}"
+            nocache="true"
+            revision="${svn.last.rev}"
+            repositoryurl="${repo}/tags/${newtag.prefix}${newtag.version}"
+            todir="${tmpdir}"
+            />
+
+    <ftpdeploy
+            host="${ftpserver}"
+            port="${ftpport}"
+            username="${ftpusername}"
+            password="${ftppassword}"
+            dir="${ftpdir}"
+            level="info"
+            >
+        <fileset dir="${tmpdir}">
+            <include name="**" />
+        </fileset>
+    </ftpdeploy>
+
+    <phingcall target="cleantmp" />
+</target>
+
+<target name="build" depends="ftpdiff" />
+</project>

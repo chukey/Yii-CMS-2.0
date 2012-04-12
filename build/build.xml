@@ -1,0 +1,21 @@
+<project name="yii-cms" basedir="." default="build">
+    <!-- Sets the DSTAMP, TSTAMP and TODAY properties -->
+    <tstamp/>
+
+    <!-- Load our configuration -->
+    <property file="./build.properties" />
+
+    <property name="root" value="..//" override="false" />
+
+    <target name="clear_cache_dir">
+        <echo>Очищаем директории кэша</echo>
+        <delete dir="${webroot}/assets/" />
+        <mkdir dir="${webroot}/assets/" mode="0777" />
+        <delete dir="${app.dir}/runtime/" />
+        <mkdir dir="${app.dir}/runtime/" mode="0777" />
+    </target>
+
+    <target name="build" depends="clear_cache_dir">
+    </target>
+
+</project>

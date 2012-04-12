@@ -26,8 +26,6 @@ class MetaTagBehavior extends CActiveRecordBehavior
             $meta_tag->attributes = $attributes;
             $meta_tag->save();
         }
-
-        return parent::afterSave($event);
     }
 
 
@@ -37,8 +35,6 @@ class MetaTagBehavior extends CActiveRecordBehavior
             'object_id' => $this->owner->id,
             'model_id'  => get_class($this->owner)
         ));
-
-        return parent::afterDelete($event);
     }
 
 

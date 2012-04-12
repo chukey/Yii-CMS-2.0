@@ -42,6 +42,7 @@ class PageController extends Controller
 
     public function actionMain()
     {
+        Y::end(3);
         require_once Yii::getPathOfAlias('ext.Github.Autoloader').'.php';
         Yii::registerAutoloader(array('Github_Autoloader','autoload'), true);
         $github = new Github_Client();
@@ -58,8 +59,7 @@ class PageController extends Controller
             $p = new Phar($target.$file);
             $p->extractTo(Yii::getPathOfAlias('application.runtime'));
         }
-
-        Y::dump($tags);
+Y::end();
 
 
         $page = Page::model()->published()->findByAttributes(array("url" => "/"));
